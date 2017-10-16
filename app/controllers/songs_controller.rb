@@ -47,12 +47,17 @@ class SongsController < ApplicationController
   def edit
     if params[:artist_id]
       @artist = Artist.find_by(params[:artist_id])
+      #binding.pry
       if @artist.nil?
         redirect_to artists_path, alert: "Artist not found"
-      elsif @song = @artist.songs.find_by(id: params[:id])
-        redirect_to edit_artist_song_path(@artist)
+      end
+      @song = @artist.songs.find_by(id: params[:id])
+      binding.pry if params[:id] == 1234
+      if @song.nil?
+        binding.pry
+        redirect_to artist_songs_path(@artist, @song) , alert: "Song not found" 
       else
-        redirect_to artist_songs_path(@artist) , alert: "Song not found"
+        redirect_to edit_artist_song_path
       end
     else
       @song = Song.find(params[:id])
